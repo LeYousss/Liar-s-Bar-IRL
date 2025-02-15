@@ -6,9 +6,33 @@ let isPaused = false;
 
 // Sons
 const barMusic = new Audio('sounds/bar_music.mp3');
+barMusic.volume = 0.3; // Réduit le volume à 30%
 const suspenseMusic = new Audio('sounds/suspense.mp3');
 const gunshot = new Audio('sounds/gunshot.mp3');
 const emptyClick = new Audio('sounds/empty_click.mp3');
+
+// Variables pour contrôler le son
+let isMusicMuted = false;
+let areAllSoundsMuted = false;
+
+// Fonction pour couper/rétablir la musique de fond
+function toggleMusic() {
+    isMusicMuted = !isMusicMuted;
+    barMusic.muted = isMusicMuted;
+    document.querySelector('#soundControls button:nth-child(1)').textContent = 
+        isMusicMuted ? "Rétablir la musique" : "Couper la musique";
+}
+
+// Fonction pour couper/rétablir tous les sons
+function toggleAllSounds() {
+    areAllSoundsMuted = !areAllSoundsMuted;
+    barMusic.muted = areAllSoundsMuted;
+    suspenseMusic.muted = areAllSoundsMuted;
+    gunshot.muted = areAllSoundsMuted;
+    emptyClick.muted = areAllSoundsMuted;
+    document.querySelector('#soundControls button:nth-child(2)').textContent = 
+        areAllSoundsMuted ? "Rétablir tous les sons" : "Couper tous les sons";
+}
 
 // Initialisation du jeu
 function initializeGame() {
