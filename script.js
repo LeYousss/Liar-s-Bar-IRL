@@ -23,7 +23,7 @@ function startGame() {
     const playerCount = localStorage.getItem('playerCount');
     for (let i = 0; i < playerCount; i++) {
         const playerName = document.getElementById(`player${i + 1}`).value || `Joueur ${i + 1}`;
-        players.push({ name: playerName, alive: true, probabilityIndex: 0 });
+        players.push({ name: playerName, alive: true, probabilityIndex: 0, showReloadButton: false });
     }
     document.getElementById('playerSetup').style.display = 'none';
     document.getElementById('gameArea').style.display = 'block';
@@ -42,18 +42,11 @@ function renderPlayers() {
                     <p>${player.name}</p>
                     <p>${probabilities[player.probabilityIndex]}%</p>
                     <button onclick="shoot(${index})">Tirer</button>
+                    ${player.showReloadButton ? `<button onclick="resetPlayerProbability(${index})">Relancer ?</button>` : ''}
                 </div>
             `;
         }
     });
-
-    // Ajouter le bouton "Relancer ?" si au moins un joueur est éliminé
-    const eliminatedPlayers = players.filter(player => !player.alive);
-    if (eliminatedPlayers.length > 0) {
-        playersDisplay.innerHTML += `
-            <button onclick="resetProbabilities()">Relancer ?</button>
-        `;
-    }
 }
 
 function shoot(playerIndex) {
@@ -66,24 +59,22 @@ function shoot(playerIndex) {
         if (result) {
             gunshot.play();
             alert(`BOOM ! Le pistolet de ${player.name} a tiré.`);
-            player.alive = false;
-            renderPlayers();
+            player.showReloadButton = true;
         } else {
             emptyClick.play();
             alert(`Click... rien ne se passe pour ${player.name}.`);
             player.probabilityIndex++;
-            renderPlayers();
         }
+        renderPlayers();
         checkWinner();
     }, 4000);
 }
 
-function resetProbabilities() {
-    players.forEach(player => {
-        if (player.alive) {
-            player.probabilityIndex = 0;
-        }
-    });
+function resetPlayerProbability(playerIndex) {
+    if (players[playerIndex].alive) {
+        players[playerIndex].probabilityIndex = 0;
+        players[playerIndex].showReloadButton = false;
+    }
     renderPlayers();
 }
 
@@ -148,7 +139,7 @@ function closeAddPlayerMenu() {
 function addNewPlayer() {
     const newPlayerName = document.getElementById('newPlayerName').value || `Joueur ${players.length + 1}`;
     if (players.length < 6) {
-        players.push({ name: newPlayerName, alive: true, probabilityIndex: 0 });
+        players.push({ name: newPlayerName, alive: true, probabilityIndex: 0, showReloadButton: false });
         closeAddPlayerMenu();
         renderPlayers();
     } else {
@@ -160,6 +151,7 @@ function restartGame() {
     players.forEach(player => {
         player.alive = true;
         player.probabilityIndex = 0;
+        player.showReloadButton = false;
     });
     renderPlayers();
     barMusic.play();
