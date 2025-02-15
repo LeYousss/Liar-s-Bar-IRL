@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liar's Bar IRL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Liar's Bar IRL</h1>
+        <p>Choisissez le nombre de joueurs :</p>
+        <button onclick="startGame(4)">4 joueurs</button>
+        <button onclick="startGame(5)">5 joueurs</button>
+        <button onclick="startGame(6)">6 joueurs</button>
+    </div>
+    <script>
+        function startGame(playerCount) {
+            localStorage.setItem('playerCount', playerCount);
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>

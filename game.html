@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liar's Bar IRL - Jeu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Liar's Bar IRL</h1>
+        <div id="playerSetup">
+            <p>Entrez les noms des joueurs :</p>
+            <div id="playerInputs"></div>
+            <button onclick="startGame()">Lancer la partie</button>
+        </div>
+        <div id="gameArea" style="display: none;">
+            <div id="playersDisplay"></div>
+            <button id="pauseButton" onclick="togglePause()">Pause</button>
+        </div>
+        <div id="pauseMenu" style="display: none;">
+            <button onclick="resumeGame()">Reprendre</button>
+            <button onclick="openRemovePlayerMenu()">Abandonner un joueur</button>
+            <button onclick="openAddPlayerMenu()">Ajouter un joueur</button>
+            <button onclick="restartGame()">Relancer la partie</button>
+        </div>
+        <div id="removePlayerMenu" style="display: none;">
+            <p>Sélectionnez un joueur à supprimer :</p>
+            <div id="removePlayerOptions"></div>
+            <button onclick="closeRemovePlayerMenu()">Annuler</button>
+        </div>
+        <div id="addPlayerMenu" style="display: none;">
+            <p>Entrez le nom du nouveau joueur :</p>
+            <input type="text" id="newPlayerName" placeholder="Nouveau joueur">
+            <button onclick="addNewPlayer()">Ajouter</button>
+            <button onclick="closeAddPlayerMenu()">Annuler</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
