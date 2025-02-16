@@ -34,6 +34,47 @@ function toggleAllSounds() {
         areAllSoundsMuted ? "Rétablir tous les sons" : "Couper tous les sons";
 }
 
+// Fonction pour afficher le message de suspense
+function showSuspenseMessage(playerName) {
+    const suspenseMessage = document.createElement('div');
+    suspenseMessage.id = 'suspenseMessage';
+    suspenseMessage.textContent = `Patientez, ${playerName} pointe son arme...`;
+    suspenseMessage.style.position = 'fixed';
+    suspenseMessage.style.top = '50%';
+    suspenseMessage.style.left = '50%';
+    suspenseMessage.style.transform = 'translate(-50%, -50%)';
+    suspenseMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    suspenseMessage.style.color = '#fff';
+    suspenseMessage.style.padding = '20px';
+    suspenseMessage.style.borderRadius = '10px';
+    suspenseMessage.style.zIndex = '1000';
+    document.body.appendChild(suspenseMessage);
+}
+
+// Fonction pour cacher le message de suspense
+function hideSuspenseMessage() {
+    const suspenseMessage = document.getElementById('suspenseMessage');
+    if (suspenseMessage) {
+        suspenseMessage.remove();
+    }
+}
+
+// Fonction pour désactiver tous les boutons
+function disableButtons() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+}
+
+// Fonction pour réactiver tous les boutons
+function enableButtons() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.disabled = false;
+    });
+}
+
 // Initialisation du jeu
 function initializeGame() {
     const playerCount = localStorage.getItem('playerCount');
@@ -75,11 +116,22 @@ function renderPlayers() {
 
 function shoot(playerIndex) {
     if (isPaused) return;
+
+    // Désactiver tous les boutons
+    disableButtons();
+
     const player = players[playerIndex];
     const probability = probabilities[player.probabilityIndex];
     const result = Math.random() * 100 < probability;
+
+    // Afficher le message de suspense
+    showSuspenseMessage(player.name);
+
     suspenseMusic.play();
     setTimeout(() => {
+        // Cacher le message de suspense
+        hideSuspenseMessage();
+
         if (result) {
             gunshot.play();
             alert(`BOOM ! Le pistolet de ${player.name} a tiré.`);
@@ -89,6 +141,9 @@ function shoot(playerIndex) {
             alert(`Click... rien ne se passe pour ${player.name}.`);
             player.probabilityIndex++;
         }
+
+        // Réactiver les boutons
+        enableButtons();
         renderPlayers();
         checkWinner();
     }, 4000);
